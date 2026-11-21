@@ -1,0 +1,1 @@
+import{Wr as e,_o as t,ba as n,hi as r}from"./index-CdogmdF1.js";async function i(){if(!await e())return{kind:`signed_out`};let t=await n();return t===!1?{kind:`unknown`}:await a(t)?{kind:`signed_in`,me:t}:{kind:`signed_out`}}async function a(e){return t(e.user)?!0:r.isOnGamePortal()&&await r.getUserProfile()!==null}export{i as n,a as t};

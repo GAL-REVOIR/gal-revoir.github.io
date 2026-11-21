@@ -1,0 +1,1 @@
+import{Et as e,H as t,Tt as n,ui as r}from"./index-C4scEURh.js";var i=n(class extends e{constructor(){super(...arguments),this.key=r}render(e,t){return this.key=e,t}update(e,[n,r]){return n!==this.key&&(t(e),this.key=n),r}});export{i as t};
