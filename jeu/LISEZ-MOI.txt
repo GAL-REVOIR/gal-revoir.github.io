@@ -1,0 +1,39 @@
+Lecteur de replay d'OpenFront, hébergé pour le site du clan [GAL] (https://les-gaulois.github.io/revoir). Version non officielle.
+
+Code : le client du jeu OpenFront, https://github.com/openfrontio/OpenFrontIO, aux commits :
+  5004a6420d1ba5743291c56ed688b42b5f9e8e10
+  7f10dda6629bbcfbd782948ba39acce8efca84f1
+  a9780cf68b5ef7210b1917bcda138054e9986add
+© OpenFront and Contributors, sous licence GNU AGPL-3.0 avec les conditions de sa section 7 (fichier LICENSE du dépôt du jeu).
+Modifié par le site du clan depuis le 15 novembre 2026 : construit sans les fichiers propriétaires du jeu ; manifeste des
+fichiers remplacé pour lire les fichiers libres du jeu sur GitHub ou sur ce site, par cette seule ligne de vite.config.ts :
+  avant : __ASSET_MANIFEST__: JSON.stringify(assetManifest),
+  après : __ASSET_MANIFEST__: process.env.GAL_MANIFEST ? fs.readFileSync(process.env.GAL_MANIFEST, "utf8") : JSON.stringify(assetManifest),
+depuis le 16 novembre 2026, dans src/client/CrazyGamesSDK.ts (le lecteur, encadré dans la page du clan, ne se croit jamais sur le portail CrazyGames) :
+  avant : isOnCrazyGames(): boolean {
+  après : isOnCrazyGames(): boolean { /* Site du clan [GAL] : jamais sur CrazyGames, même encadré. */ return false;
+depuis le 16 novembre 2026, dans src/client/replay/ReplayCamera.ts (la carte remplit toujours la vue du lecteur, sans fond autour ni dézoom au-delà de la carte) :
+  avant :   /** Fit the whole map in view, like the game does at the start. */
+  après :   /* Site du clan [GAL] : la carte couvre toujours la vue, jamais de fond autour, ni de dézoom au-delà de la carte. */ vue(viewWidth: number, viewHeight: number): void { if (!(viewWidth > 0 && viewHeight > 0)) return; this.zoom = Math.min(MAX_ZOOM, Math.max(this.zoom, viewWidth / this.mapWidth, viewHeight / this.mapHeight)); const demiL = Math.min(viewWidth / 2 / this.zoom, this.mapWidth / 2); const demiH = Math.min(viewHeight / 2 / this.zoom, this.mapHeight / 2); this.x = Math.min(Math.max(this.x, demiL), this.mapWidth - demiL); this.y = Math.min(Math.max(this.y, demiH), this.mapHeight - demiH); } /** Fit the whole map in view, like the game does at the start. */
+depuis le 16 novembre 2026, dans src/client/replay/ReplayViewer.ts (la caméra reçoit la taille de la vue à chaque image) :
+  avant :       camera.step(last === null ? 0 : now - last);
+  après :       camera.step(last === null ? 0 : now - last); camera.vue(canvas.clientWidth, canvas.clientHeight); /* Site du clan [GAL] */
+depuis le 16 novembre 2026, dans src/client/replay/ReplayViewer.ts (la page du lecteur lance la lecture en ×8 dans le cadre du site du clan, et la met en pause à sa demande) :
+  avant :     await playback.seek(0);
+    // disconnectedCallback has disposed the renderer by now.
+    if (this.abort.signal.aborted) return;
+
+  après :     await playback.seek(0); // disconnectedCallback has disposed the renderer by now. if (this.abort.signal.aborted) return; /* Site du clan [GAL] : la lecture confiée à la page du lecteur (lecture d'office en ×8 dans le cadre, pause demandée par le site). */ const galLecture = (globalThis as { galLecture?: (lecture: ReplayPlayback) => void }).galLecture; if (typeof galLecture === "function") galLecture(playback); 
+page sans aucun script de publicité ni de mesure, avec une règle de sécurité qui n'autorise que ce site et le dépôt du jeu sur
+GitHub, un titre, un bandeau, et un renvoi vers le site du clan quand aucune partie n'est choisie ; sans logos ni icônes de
+l'application.
+La façon de le construire : scripts/construire-lecteurs.ts, src/lib/rejeu/lecteur-jeu.ts et scripts/publier-films.ts du dépôt
+du site, https://github.com/les-gaulois/les-gaulois.github.io (AGPL-3.0).
+
+Fichiers du jeu (images, cartes, drapeaux, sons, langues) : dossier resources/ du même dépôt, © OpenFront and Contributors,
+sous licence CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/deed.fr), lus sur GitHub ou copiés tels quels
+sur ce site (images SVG du lecteur, drapeaux des joueurs). Aucun fichier du dossier proprietary/ du jeu, aucun logo de marque.
+
+Fiches des parties : l'API publique d'OpenFront (/public/game/<partie>), sans l'identifiant public ni les cosmétiques des
+joueurs (sauf leur drapeau, fichier libre du jeu). Les noms des tribus de robots restent, sans rien d'autre : le moteur du jeu
+en a besoin pour rejouer la partie, même quand ce sont des noms achetés dans sa boutique.

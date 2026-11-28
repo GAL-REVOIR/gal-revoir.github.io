@@ -1,0 +1,1 @@
+import{Ci as e,Oa as t,Qr as n,To as r}from"./index-hx7tETuk.js";async function i(){if(!await n())return{kind:`signed_out`};let e=await t();return e===!1?{kind:`unknown`}:await a(e)?{kind:`signed_in`,me:e}:{kind:`signed_out`}}async function a(t){return r(t.user)?!0:e.isOnGamePortal()&&await e.getUserProfile()!==null}export{i as n,a as t};

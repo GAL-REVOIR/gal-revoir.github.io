@@ -1,0 +1,1 @@
+import{G as e,Ot as t,kt as n,vi as r}from"./index-hx7tETuk.js";var i=t(class extends n{constructor(){super(...arguments),this.key=r}render(e,t){return this.key=e,t}update(t,[n,r]){return n!==this.key&&(e(t),this.key=n),r}});export{i as t};
